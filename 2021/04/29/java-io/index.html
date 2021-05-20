@@ -1,0 +1,620 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Chu">
+  <meta name="keywords" content="">
+  
+  <title>java_io流 - ever的个人博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css# 鼠标指针.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Chu</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- 天气网 -->
+	<!--添加天气，url=https://cj.weather.com.cn/ -->
+<iframe width="210" scrolling="no" height="60" frameborder="0" allowtransparency="true" src="https://i.tianqi.com?c=code&id=12&color=%23C6C6C6&icon=3&num=1&site=12"></iframe>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                主页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                存档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="java_io流">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-04-29 17:21" pubdate>
+        2021年4月29日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      86
+       分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">java_io流</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：19 天前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h2 id="1-基于io的总结"><a href="#1-基于io的总结" class="headerlink" title="1 基于io的总结"></a>1 基于io的总结</h2><h3 id="1-0-编解码的基本使用"><a href="#1-0-编解码的基本使用" class="headerlink" title="1.0 编解码的基本使用"></a>1.0 编解码的基本使用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.UnsupportedEncodingException;<br><br>//编码、解码<br>public class Test04 &#123;<br>	public static void main(String[] args) throws UnsupportedEncodingException &#123;<br>		//编码  字符到字节<br>		String msg = <span class="hljs-string">&quot;性命生命使命a&quot;</span>;<br>		//默认使用工程的字符集<br>		byte[] datas = msg.getBytes();<br>		System.out.println(datas.length);<br><br>		//指定其他字符集<br>		datas = msg.getBytes(<span class="hljs-string">&quot;UTF-16LE&quot;</span>);<br>		System.out.println(datas.length);<br>		datas = msg.getBytes(<span class="hljs-string">&quot;GBK&quot;</span>);<br>		System.out.println(datas.length);<br><br><br>		//解码 字节到字符<br>		msg = new String(datas,0, datas.length,<span class="hljs-string">&quot;GBK&quot;</span>);<br>		System.out.println(msg);<br>		//乱码 1、字节数不够  2、字节数不统一<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-1-InputStream基本使用"><a href="#1-1-InputStream基本使用" class="headerlink" title="1.1 InputStream基本使用"></a>1.1 InputStream基本使用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br>//InputStream<br>public class Test05 &#123;<br>	public static void main(String[] args) &#123;<br>		//创建源<br>		File file = new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>);<br>		InputStream is = null;<br>		//选择流<br>		try &#123;<br>			is = new FileInputStream(file);<br>			//操作(读取)<br>			int temp;<br>			<span class="hljs-keyword">while</span> ((temp = is.read() )!= -1)&#123;<br>				System.out.println((char) temp);<br>			&#125;<br><br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			//释放资源<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(null!=is)&#123;<br>					is.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-2-InputStream-分段读取文件字节输入流"><a href="#1-2-InputStream-分段读取文件字节输入流" class="headerlink" title="1.2 InputStream(分段读取文件字节输入流)"></a>1.2 InputStream(分段读取文件字节输入流)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br>//InputStream 分段读取文件字节输入流<br>public class Test06 &#123;<br>	public static void main(String[] args) &#123;<br>		//创建源<br>		File file = new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>);<br>		InputStream is = null;<br>		//选择流<br>		try &#123;<br>			is = new FileInputStream(file);<br>			//操作(读取)<br>			byte[] bytes = new byte[3]; //缓冲容器<br>			int len = -1; //接受长度<br>			<span class="hljs-keyword">while</span> ((len = is.read(bytes) )!= -1)&#123;<br>				String str = new String(bytes,0,len);<br>				System.out.println(str);<br>			&#125;<br><br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			//释放资源<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(null!=is)&#123;<br>					is.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-3-FileOutputStream-分段读取文件字节输出流"><a href="#1-3-FileOutputStream-分段读取文件字节输出流" class="headerlink" title="1.3 FileOutputStream(分段读取文件字节输出流)"></a>1.3 FileOutputStream(分段读取文件字节输出流)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br><br>//分段读取文件字节输出流<br>public class Test07 &#123;<br>	public static void main(String[] args) &#123;<br>		//创建源<br>		File file = new File(<span class="hljs-string">&quot;met/src/Io/dest&quot;</span>);<br>		//选择流<br>		OutputStream os =null;<br>		try &#123;<br>			//<span class="hljs-literal">true</span>追加元素 默认<span class="hljs-literal">false</span>覆盖元素<br>			os = new FileOutputStream(file,<span class="hljs-literal">true</span>);<br>			//操作(写出)<br>			String str = <span class="hljs-string">&quot;io is so easy&quot;</span>;<br>			//字符串--&gt;字节数组(编码)<br>			byte[] datas = str.getBytes();<br>			os.write(datas,0, datas.length);<br>			os.flush();<br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			//释放资源<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(null != os)&#123;<br>				  os.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br><br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-4-文件拷贝-文件字节输入、输出流"><a href="#1-4-文件拷贝-文件字节输入、输出流" class="headerlink" title="1.4 文件拷贝:文件字节输入、输出流"></a>1.4 文件拷贝:文件字节输入、输出流</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br><br>//文件拷贝:文件字节输入、输出流<br>public class Test08 &#123;<br>	public static void main(String[] args) &#123;<br>		copy(<span class="hljs-string">&quot;met/src/img/io.jpg&quot;</span>,<span class="hljs-string">&quot;met/src/img/ios.jpg&quot;</span>);<br>	&#125;<br><br>	public static void copy(String srcPath,String destPath)&#123;<br>		//创建源<br>		File file = new File(srcPath);<br>		File file1 = new File(destPath);<br>		InputStream is = null;<br>		OutputStream os =null;<br>		//选择流<br>		try &#123;<br>			is = new FileInputStream(file);<br>			os = new FileOutputStream(file1);<br>			//操作(读取)<br>			byte[] bytes = new byte[1024]; //缓冲容器<br>			int len = -1; //接受长度<br>			<span class="hljs-keyword">while</span> ((len = is.read(bytes) )!= -1)&#123;<br>				//操作(写出)<br>				os.write(bytes,0, len);<br>			&#125;<br>			os.flush();<br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			//释放资源<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(null != os)&#123;<br>					os.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(null!=is)&#123;<br>					is.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br>	&#125;<br><br><br>	//放入声明自动释放资源<br>	/*<br>	public static void copy1(String srcPath,String destPath)&#123;<br>		//创建源<br>		File file = new File(srcPath);<br>		File file1 = new File(destPath);<br><br>		//选择流<br>		try(InputStream is = new FileInputStream(file);OutputStream os = new FileOutputStream(file1);) &#123;<br><br>			//操作(读取)<br>			byte[] bytes = new byte[1024]; //缓冲容器<br>			int len = -1; //接受长度<br>			<span class="hljs-keyword">while</span> ((len = is.read(bytes) )!= -1)&#123;<br>				//操作(写出)<br>				os.write(bytes,0, len);<br>			&#125;<br>			os.flush();<br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	*/<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-5-FileReader-文件字符输入流-分段读取"><a href="#1-5-FileReader-文件字符输入流-分段读取" class="headerlink" title="1.5 FileReader(文件字符输入流,分段读取)"></a>1.5 FileReader(文件字符输入流,分段读取)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br><br>//分段读取,文件字符输入流<br>public class Test09 &#123;<br>	public static void main(String[] args) &#123;<br>		//创建源<br>		File file = new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>);<br>		Reader reader = null;<br>		//选择流<br>		try &#123;<br>			reader = new FileReader(file);<br>			//操作(读取)<br>			char[] bytes = new char[2]; //缓冲容器<br>			int len = -1; //接受长度<br>			<span class="hljs-keyword">while</span> ((len = reader.read(bytes) )!= -1)&#123;<br>				//字符数组--&gt;字符串<br>				String str = new String(bytes,0,len);<br>				System.out.println(str);<br>			&#125;<br><br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			//释放资源<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(null!=reader)&#123;<br>					reader.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-6-FileWriter-文件字符输出流-分段读取"><a href="#1-6-FileWriter-文件字符输出流-分段读取" class="headerlink" title="1.6 FileWriter(文件字符输出流:分段读取)"></a>1.6 FileWriter(文件字符输出流:分段读取)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br><br>//分段读取：文件字符输出流<br>public class Test10 &#123;<br>	public static void main(String[] args) &#123;<br>		//创建源<br>		File file = new File(<span class="hljs-string">&quot;met/src/Io/dest&quot;</span>);<br>		//选择流<br>		Writer writer =null;<br>		try &#123;<br>			//<span class="hljs-literal">true</span>追加元素 默认<span class="hljs-literal">false</span>覆盖元素<br>			writer = new FileWriter(file,<span class="hljs-literal">true</span>);<br>			//操作(写出)<br><br>			String str = <span class="hljs-string">&quot;io is so easy\n哈哈哈&quot;</span>;<br>			//字符串-&gt;字符数组<br>			char[] datas = str.toCharArray();<br>			writer.write(datas,0, datas.length);<br>			writer.flush();<br>			//方法二<br><br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			//释放资源<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(null != writer)&#123;<br>					writer.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br><br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-7-ByteArrayInputStream-字节数组输入流"><a href="#1-7-ByteArrayInputStream-字节数组输入流" class="headerlink" title="1.7 ByteArrayInputStream(字节数组输入流)"></a>1.7 ByteArrayInputStream(字节数组输入流)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br><br>public class Test11 &#123;<br>	public static void main(String[] args) &#123;<br>		//创建源<br>		byte[] src = <span class="hljs-string">&quot;talk is cheap show me the code&quot;</span>.getBytes();<br>		//选择流<br>		InputStream is = null;<br>		try &#123;<br>			//字节数组输入流<br>			//创建源:字节数组 不要太大<br>			is = new ByteArrayInputStream(src);<br>			byte[] bytes = new byte[5];<br>			int len = -1;<br>			<span class="hljs-keyword">while</span> ((len = is.read(bytes))!=-1)&#123;<br>				String str = new String(bytes,0,len);<br>				System.out.println(str);<br>			&#125;<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			 //释放资源可以不用处理 close()空方法<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-8-ByteArrayOutputStream-字节数组输出流"><a href="#1-8-ByteArrayOutputStream-字节数组输出流" class="headerlink" title="1.8 ByteArrayOutputStream(字节数组输出流)"></a>1.8 ByteArrayOutputStream(字节数组输出流)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br><br>public class Test12 &#123;<br>	public static void main(String[] args) &#123;<br>		//创建源<br>		byte[] bytes = null;<br>		//选择流<br>		ByteArrayOutputStream baos =null;<br>		try &#123;<br>			//<br>			baos = new ByteArrayOutputStream();<br>			//操作(写出)<br>			String str = <span class="hljs-string">&quot;io is so easy&quot;</span>;<br>			//字符串--&gt;字节数组(编码)<br>			byte[] datas = str.getBytes();<br>			baos.write(datas,0, datas.length);<br>			baos.flush();<br>			//获取数据<br>			bytes = baos.toByteArray();<br>			System.out.println(bytes.length + <span class="hljs-string">&quot;--&gt;&quot;</span> + new String(bytes,0,baos.size()));<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			//释放资源<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(null != baos)&#123;<br>					baos.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-9-图片读到字符数组中"><a href="#1-9-图片读到字符数组中" class="headerlink" title="1.9 图片读到字符数组中"></a>1.9 图片读到字符数组中</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br><br>//1.将图片读取到字符数组中<br>//2.字符数组写到图片<br>public class Test13 &#123;<br>	public static void main(String[] args) &#123;<br>		byte[] bytes = fileToByteArray(<span class="hljs-string">&quot;met/src/img/io.jpg&quot;</span>);<br>		System.out.println(bytes.length);<br>		byteArrayToFile(bytes,<span class="hljs-string">&quot;met/src/img/p-byte.jpg&quot;</span>);<br>	&#125;<br><br>	//1.将图片读取到字符数组中<br>	public static byte[] fileToByteArray(String filePath)&#123;<br>		//创建源<br>		File file = new File(filePath);<br>		byte[] dest = null;<br>		InputStream is = null;<br>		ByteArrayOutputStream baos = null;<br>		//选择流<br>		try &#123;<br>			is = new FileInputStream(file);<br>			baos = new ByteArrayOutputStream();<br>			//操作(读取)<br>			byte[] bytes = new byte[3]; //缓冲容器<br>			int len = -1; //接受长度<br>			<span class="hljs-keyword">while</span> ((len = is.read(bytes) )!= -1)&#123;<br>				baos.write(bytes,0,len);<br>			&#125;<br>			baos.flush();<br>			<span class="hljs-built_in">return</span> baos.toByteArray();<br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			//释放资源<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(null!=is)&#123;<br>					is.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br><br>		<span class="hljs-built_in">return</span> null;<br>	&#125;<br><br>	//2.字符数组写到图片<br>	public static void byteArrayToFile(byte[] src,String filePath )&#123;<br>		 File file = new File(filePath);<br>		 OutputStream os =null;<br>		 ByteArrayInputStream bais = null;<br>		 try &#123;<br>			//<span class="hljs-literal">true</span>追加元素 默认<span class="hljs-literal">false</span>覆盖元素<br>			os = new FileOutputStream(file);<br>			bais = new ByteArrayInputStream(src);<br>			byte[] bytes = new byte[5];<br>			int len = -1;<br>			<span class="hljs-keyword">while</span>((len = bais.read(bytes)) != -1)&#123;<br>				os.write(bytes,0,len);<br>			&#125;<br>			os.flush();<br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			//释放资源<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(null != os)&#123;<br>					os.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br><br>	&#125;<br>&#125;<br><br><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-0-封装-图片读到字符数组"><a href="#2-0-封装-图片读到字符数组" class="headerlink" title="2.0 (封装)图片读到字符数组"></a>2.0 (封装)图片读到字符数组</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import javax.imageio.IIOException;<br>import java.io.*;<br><br>//封装<br>public class Test14 &#123;<br>	public static void main(String[] args) &#123;<br>		 //文件到字节数组<br>		byte[] tatas = null;<br>		try &#123;<br>			InputStream is = new FileInputStream(<span class="hljs-string">&quot;met/src/img/io.jpg&quot;</span>);<br>			ByteArrayOutputStream baos = new ByteArrayOutputStream();<br>			copy(is,baos);<br>			tatas = baos.toByteArray();<br><br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br><br>		//字节数组到文件<br><br>		try &#123;<br>			InputStream bais = new ByteArrayInputStream(tatas);<br>			OutputStream os = new FileOutputStream(<span class="hljs-string">&quot;met/src/img/p1-byte.jpg&quot;</span>);<br>			copy(bais,os);<br><br><br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br><br>	public static void copy(InputStream is, OutputStream os)&#123;<br><br>		try &#123;<br>			byte[] temps = new byte[1024];<br>			int len = -1;<br>			<span class="hljs-keyword">while</span> ((len = is.read(temps)) != -1)&#123;<br>				os.write(temps,0,len);<br>			&#125;<br>			os.flush();<br>		&#125;catch (IOException e)&#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			close(is,os);<br>		&#125;<br>	&#125;<br><br>	//释放资源 1.<br>	public static void close(InputStream is,OutputStream os)&#123;<br>		try &#123;<br>			<span class="hljs-keyword">if</span>(is != null)&#123;<br>				is.close();<br>			&#125;<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>		try &#123;<br>			<span class="hljs-keyword">if</span>(os != null)&#123;<br>				os.close();<br>			&#125;<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br><br>	//2.多态实现父接口<br>	public static void close(Closeable... ca)&#123;<br>		<span class="hljs-keyword">for</span> (Closeable io:ca)&#123;<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(io != null)&#123;<br>					io.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	//3.丢弃finally，加入try参数自动释放<br>	public static void copy1(InputStream is, OutputStream os)&#123;<br><br>		try(is;os) &#123;<br>			byte[] temps = new byte[1024];<br>			int len = -1;<br>			<span class="hljs-keyword">while</span> ((len = is.read(temps)) != -1)&#123;<br>				os.write(temps,0,len);<br>			&#125;<br>			os.flush();<br>		&#125;catch (IOException e)&#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-1-BufferedInput-Output-字节缓冲流"><a href="#2-1-BufferedInput-Output-字节缓冲流" class="headerlink" title="2.1 (BufferedInput/Output)字节缓冲流"></a>2.1 (BufferedInput/Output)字节缓冲流</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br><br>//字节缓冲流<br>public class Test17 &#123;<br>	public static void main(String[] args) &#123;<br>		bis();<br>		bos();<br>	&#125;<br><br>	public static void <span class="hljs-function"><span class="hljs-title">bis</span></span>()&#123;<br>		//创建源<br>		File file = new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>);<br>		InputStream bis = null;<br>		//选择流<br>		try &#123;<br>			bis = new BufferedInputStream(new FileInputStream(file));<br>			//操作(读取)<br>			byte[] bytes = new byte[1024]; //缓冲容器<br>			int len = -1; //接受长度<br>			<span class="hljs-keyword">while</span> ((len = bis.read(bytes) )!= -1)&#123;<br>				String str = new String(bytes,0,len);<br>				System.out.println(str);<br>			&#125;<br><br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			//释放资源<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(null!=bis)&#123;<br>					bis.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	public static void <span class="hljs-function"><span class="hljs-title">bos</span></span>()&#123;<br>		//创建源<br>		File file = new File(<span class="hljs-string">&quot;met/src/Io/dest&quot;</span>);<br>		//选择流<br>		OutputStream bos =null;<br>		try &#123;<br>			//<span class="hljs-literal">true</span>追加元素 默认<span class="hljs-literal">false</span>覆盖元素<br>			bos = new BufferedOutputStream(new FileOutputStream(file));<br>			//操作(写出)<br>			String str = <span class="hljs-string">&quot;io is so easy&quot;</span>;<br>			//字符串--&gt;字节数组(编码)<br>			byte[] datas = str.getBytes();<br>			bos.write(datas,0, datas.length);<br>			bos.flush();<br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			//释放资源<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(null != bos)&#123;<br>					bos.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-2-BufferedReader-Writer"><a href="#2-2-BufferedReader-Writer" class="headerlink" title="2.2 BufferedReader/Writer"></a>2.2 BufferedReader/Writer</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br><br>//文件字节输入/输出流 加入缓冲流<br>//子类新增方法不能使用多态<br>public class Test18 &#123;<br>	public static void main(String[] args) &#123;<br>		br();<br>		bw();<br>		copy(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>,<span class="hljs-string">&quot;met/src/Io/dest&quot;</span>);<br>	&#125;<br><br>	public static void <span class="hljs-function"><span class="hljs-title">br</span></span>()&#123;<br>		//创建源<br>		File file = new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>);<br>		//只能处理纯文本<br>		BufferedReader reader = null;<br>		//选择流<br>		try &#123;<br>			reader = new BufferedReader(new FileReader(file));<br>			String line = null;<br>			<span class="hljs-keyword">while</span> ((line = reader.readLine() )!= null)&#123;<br>				System.out.println(line);<br>			&#125;<br><br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			//释放资源<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(null!=reader)&#123;<br>					reader.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	public static void <span class="hljs-function"><span class="hljs-title">bw</span></span>()&#123;<br>		//创建源<br>		File file = new File(<span class="hljs-string">&quot;met/src/Io/dest&quot;</span>);<br>		//选择流<br>		BufferedWriter writer =null;<br>		try &#123;<br>			//<span class="hljs-literal">true</span>追加元素 默认<span class="hljs-literal">false</span>覆盖元素<br>			writer = new BufferedWriter(new FileWriter(file,<span class="hljs-literal">true</span>));<br>			//操作(写出)<br><br>			String str = <span class="hljs-string">&quot;io is so easy&quot;</span>;<br>			writer.append(<span class="hljs-string">&quot;io is so easy&quot;</span>);<br>			writer.newLine();<br>			writer.append(<span class="hljs-string">&quot;哈哈&quot;</span>);<br>			writer.flush();<br><br>			//方法二<br><br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;finally &#123;<br>			//释放资源<br>			try &#123;<br>				<span class="hljs-keyword">if</span>(null != writer)&#123;<br>					writer.close();<br>				&#125;<br>			&#125; catch (IOException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	public static void copy(String srcPath,String destPath) &#123;<br>		//创建源<br>		File file = new File(srcPath);<br>		File file1 = new File(destPath);<br><br>		//选择流<br>		try (BufferedReader br = new BufferedReader(new FileReader(file));<br>			 BufferedWriter bw = new BufferedWriter(new FileWriter(file1))) &#123;<br><br>			//操作(读取)<br>			String line = null;<br>			<span class="hljs-keyword">while</span> ((line = br.readLine()) != null) &#123;<br>				//操作(逐行写出)<br>				bw.write(line);<br>				bw.newLine();<br>			&#125;<br>			bw.flush();<br>		&#125; catch (FileNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; catch (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125; finally &#123;<br><br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-3-InputStreamReader-转换流"><a href="#2-3-InputStreamReader-转换流" class="headerlink" title="2.3 InputStreamReader(转换流)"></a>2.3 InputStreamReader(转换流)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br><br>//转换流<br>//1.以字符流的形式操作字节流(纯文本)<br>//2.指定字符集<br>public class Test19 &#123;<br>	public static void main(String[] args) &#123;<br>		//操作System.in和System.out<br>		try(<br>			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));<br>			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out)))&#123;<br>			//循环获取键盘的输入(<span class="hljs-built_in">exit</span>退出),输出此内容<br>			String msg = <span class="hljs-string">&quot;&quot;</span>;<br>			<span class="hljs-keyword">while</span> (!msg.equals(<span class="hljs-string">&quot;exit&quot;</span>))&#123;<br>				msg = br.readLine();<br>				bw.write(msg);<br>				bw.newLine();<br>				bw.flush(); //缓冲容器,需要强制刷新<br>			&#125;<br>		&#125; catch (IOException e)&#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-4-操作网络流-下载百度源码"><a href="#2-4-操作网络流-下载百度源码" class="headerlink" title="2.4 操作网络流(下载百度源码)"></a>2.4 操作网络流(下载百度源码)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br>import java.net.URL;<br><br>//操作网络流 下载百度源代码<br>public class Test20 &#123;<br>	public static void main(String[] args) &#123;<br>		try(BufferedReader isr =<br>			new BufferedReader(<br>				new InputStreamReader(<br>					new URL(<span class="hljs-string">&quot;http://www.baidu.com&quot;</span>).openStream(),<span class="hljs-string">&quot;UTF-8&quot;</span>));<br>			BufferedWriter bw =<br>				new BufferedWriter(<br>						new OutputStreamWriter(<br>								new FileOutputStream(<span class="hljs-string">&quot;met/src/Io/baidu.html&quot;</span>),<span class="hljs-string">&quot;UTF-8&quot;</span>))) &#123;<br>			String temp;<br><br>			<span class="hljs-keyword">while</span>((temp = isr.readLine()) != null)&#123;<br>				bw.write(temp); //乱码原因:字符集不统一<br>				bw.newLine();<br>			&#125;<br>			bw.flush();<br>		&#125;catch (IOException e)&#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-5-DataOutputStream-数据流"><a href="#2-5-DataOutputStream-数据流" class="headerlink" title="2.5 DataOutputStream(数据流)"></a>2.5 DataOutputStream(数据流)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br>import java.util.Date;<br>/**<br> *数据流<br> * 1.写出后读取<br> * 2.读取的顺序与写的顺序保持一致<br> */<br>public class Test21 &#123;<br>	public static void main(String[] args) throws IOException &#123;<br>		//写出<br>		ByteArrayOutputStream baos = new ByteArrayOutputStream();<br>		DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(baos));<br>		dos.writeUTF(<span class="hljs-string">&quot;编码辛酸泪&quot;</span>);<br>		dos.writeInt( 18);<br>		dos.writeChar(<span class="hljs-string">&#x27;a&#x27;</span>);<br>		dos.writeBoolean(<span class="hljs-literal">false</span>);<br>		dos.flush();<br>		byte[] datas = baos.toByteArray();<br>		//读取<br>		DataInputStream dis = new DataInputStream(new BufferedInputStream(new ByteArrayInputStream(datas)));<br>		//顺序与写出一致<br>		String msg = dis.readUTF();<br>		int age = dis.readInt();<br>		char c = dis.readChar();<br>		boolean flag = dis.readBoolean();<br><br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-6-ObjectOutputStream-对象流"><a href="#2-6-ObjectOutputStream-对象流" class="headerlink" title="2.6 ObjectOutputStream(对象流)"></a>2.6 ObjectOutputStream(对象流)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br>import java.util.Date;<br>/**<br> * 对象流<br> * 1.写出后读取<br> * 2.读取的顺序与写的顺序保持一致<br> * 3.不是所有的对象都可以序列化 Serializable<br> */<br>public class Test22 &#123;<br>	public static void main(String[] args) throws IOException, ClassNotFoundException &#123;<br>		//写出 --&gt; 序列化<br>		ByteArrayOutputStream baos = new ByteArrayOutputStream();<br>		ObjectOutputStream dos = new ObjectOutputStream(new BufferedOutputStream(baos));<br>		dos.writeUTF(<span class="hljs-string">&quot;编码辛酸泪&quot;</span>);<br>		dos.writeInt( 18);<br>		dos.writeChar(<span class="hljs-string">&#x27;a&#x27;</span>);<br>		dos.writeBoolean(<span class="hljs-literal">false</span>);<br>		//写对象 内部都实现了Serializable接口<br>		dos.writeObject(<span class="hljs-string">&quot;其中味&quot;</span>);<br>		dos.writeObject(new Date());<br>		dos.flush();<br>		byte[] datas = baos.toByteArray();<br>		//读取 --&gt; 反序列化<br>		ObjectInputStream dis = new ObjectInputStream(new BufferedInputStream(new ByteArrayInputStream(datas)));<br>		//顺序与写出一致<br>		String msg = dis.readUTF();<br>		int age = dis.readInt();<br>		char c = dis.readChar();<br>		boolean flag = dis.readBoolean();<br>		Object str = dis.readObject();<br>		Object date = dis.readObject();<br><br>		<span class="hljs-keyword">if</span> (str instanceof String)&#123;<br>			String strObj = (String)str;<br>			System.out.println(strObj);<br>		&#125;<br>		<span class="hljs-keyword">if</span> (date instanceof Date)&#123;<br>			Date dateObj = (Date)date;<br>			System.out.println(dateObj);<br>		&#125;<br><br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-7-打印流"><a href="#2-7-打印流" class="headerlink" title="2.7 打印流"></a>2.7 打印流</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br>/**<br> *打印流<br> */<br>public class Test23 &#123;<br>	public static void main(String[] args) &#123;<br><br>	&#125;<br><br>	//打印流 PrintStream<br>	public static void printStr() throws FileNotFoundException &#123;<br>		PrintStream ps = System.out;<br>		ps.println(<span class="hljs-string">&quot;打印流&quot;</span>);<br>		ps.println(<span class="hljs-literal">true</span>);<br>		//<span class="hljs-literal">true</span> 自动刷新<br>		ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>)),<span class="hljs-literal">true</span>);<br>		ps.println(<span class="hljs-string">&quot;haha&quot;</span>);<br>		ps.flush();<br>		ps.close();<br>		//重定向输出端<br>		System.setOut(ps);<br>		System.out.println(<span class="hljs-string">&quot;haha&quot;</span>);<br>		//重定向到控制台<br>		System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream(FileDescriptor.out))));<br>	&#125;<br><br>	// PrintWriter<br>	public static void printWri() throws FileNotFoundException &#123;<br><br>		PrintWriter pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>)),<span class="hljs-literal">true</span>);<br>		pw.println(<span class="hljs-string">&quot;haha&quot;</span>);<br>		pw.flush();<br>		pw.close();<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-8-RandomAccessFile"><a href="#2-8-RandomAccessFile" class="headerlink" title="2.8 RandomAccessFile"></a>2.8 RandomAccessFile</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.File;<br>import java.io.FileNotFoundException;<br>import java.io.IOException;<br>import java.io.RandomAccessFile;<br><br>/**<br> * 随机读取和写入流 RandomAccessFile<br> */<br>public class Test24 &#123;<br>	public static void main(String[] args) throws IOException &#123;<br>		 test3();<br>	&#125;<br><br>	//指定起始位置,读取剩余所有内容<br>	public static void test1() throws IOException &#123;<br>		RandomAccessFile raf = new RandomAccessFile(new File(<span class="hljs-string">&quot;met/src/Io/Test09.java&quot;</span>),<span class="hljs-string">&quot;r&quot;</span>);<br>		//随机读取<br>		raf.seek(2);<br>		//读取操作<br>		byte[] data = new byte[1024];<br>		int len = -1;<br>		<span class="hljs-keyword">while</span> ((len = raf.read(data)) != -1)&#123;<br>			System.out.println(new String(data,0,len));<br>		&#125;<br>		raf.close();<br>	&#125;<br><br>	//指定起始位置和读取大小<br>	public static void test2() throws IOException &#123;<br>		RandomAccessFile raf = new RandomAccessFile(new File(<span class="hljs-string">&quot;met/src/Io/Test09.java&quot;</span>),<span class="hljs-string">&quot;r&quot;</span>);<br>		//起始位置<br>		int beginPos = 2;<br>		//文件大小<br>		int actualSize = 1026;<br>		//随机读取<br>		raf.seek(beginPos);<br>		//读取操作<br>		byte[] data = new byte[1024];<br>		int len = -1;<br>		<span class="hljs-keyword">while</span> ((len = raf.read(data)) != -1)&#123;<br><br>			<span class="hljs-keyword">if</span>(actualSize &gt; len)&#123; //获取本次读取的所有内容·<br>				System.out.println(new String(data,0,len));<br>				actualSize-=len;<br>			&#125;<span class="hljs-keyword">else</span> &#123;<br>				System.out.println(new String(data,0,actualSize));<br>				<span class="hljs-built_in">break</span>;<br>			&#125;<br><br>		&#125;<br>		raf.close();<br>	&#125;<br><br>	public static void test3() throws IOException &#123;<br>		//分多少块<br>		File file = new File(<span class="hljs-string">&quot;met/src/Io/Test09.java&quot;</span>);<br>		RandomAccessFile raf = new RandomAccessFile(file,<span class="hljs-string">&quot;r&quot;</span>);<br>		//总长度<br>		long len = file.length();<br>		//每块大小<br>		int blockSize = 1024;<br>		//块数:多少块<br>		int size = (int)Math.ceil(len*1.0/blockSize);<br>		//起始位置和大小<br>		int beginPos = 0;<br>		//实际长度<br>		int actualSize = (int)(blockSize&gt;len?len:blockSize);<br>		<span class="hljs-keyword">for</span>(int i=0;i&lt;size;i++)&#123;<br>			beginPos = i*actualSize;<br>			<span class="hljs-keyword">if</span>(i == size-1)&#123; //最后一块<br>				actualSize = (int)len;<br>			&#125;<span class="hljs-keyword">else</span> &#123;<br>				actualSize = blockSize;<br>				len-=actualSize;<br>			&#125;<br>			System.out.println(i + <span class="hljs-string">&quot;--&gt;&quot;</span> + beginPos + <span class="hljs-string">&quot;--&gt;&quot;</span> + actualSize);<br>			//随机读取<br>			raf.seek(beginPos);<br>			//读取操作<br>			byte[] data = new byte[1024];<br>			int lens = -1;<br>			<span class="hljs-keyword">while</span> ((lens = raf.read(data)) != -1)&#123;<br>				<span class="hljs-keyword">if</span>(actualSize &gt; lens)&#123; //获取本次读取的所有内容<br>					System.out.println(new String(data,0,lens));<br>					actualSize-=lens;<br>				&#125;<span class="hljs-keyword">else</span> &#123;<br>					System.out.println(new String(data,0,actualSize));<br>					<span class="hljs-built_in">break</span>;<br>				&#125;<br>			&#125;<br>		&#125;<br><br>		raf.close();<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-9-面向对象思想封装-分割-案例"><a href="#2-9-面向对象思想封装-分割-案例" class="headerlink" title="2.9 面向对象思想封装 分割(案例)"></a>2.9 面向对象思想封装 分割(案例)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import java.io.*;<br>import java.util.ArrayList;<br>import java.util.List;<br>import java.util.Vector;<br>/**<br> * 面向对象思想封装 分割<br> */<br>public class Test25 &#123;<br>	//源头<br>	private File src;<br>	//目的地(文件夹)<br>	private String destDir;<br>	//所有分割后的文件存储路径<br>	private List&lt;String&gt; destPaths;<br>	//每块大小<br>	private int blockSize;<br>	//块数<br>	private int size;<br><br>	public Test25(String srcPath,String destDir, int blockSize) &#123;<br>		this.src = new File(srcPath);<br>		this.destDir = destDir;<br>		this.blockSize = blockSize;<br>		this.destPaths = new ArrayList&lt;&gt;();<br><br>		init();<br>	&#125;<br><br>	private void <span class="hljs-function"><span class="hljs-title">init</span></span>()&#123;<br>		//总长度<br>		long len = this.src.length();<br>		//块数:多少块<br>		this.size = (int)Math.ceil(len*1.0/blockSize);<br>		//路径<br>		<span class="hljs-keyword">for</span> (int i=0;i&lt;size;i++)&#123;<br>			this.destPaths.add(this.destDir + <span class="hljs-string">&quot;/&quot;</span> + i + <span class="hljs-string">&quot;-&quot;</span> + this.src.getName());<br>		&#125;<br>	&#125;<br><br>	public void split() throws IOException &#123;<br>		//总长度<br>		long len = this.src.length();<br>		//起始位置和大小<br>		int beginPos = 0;<br>		//实际长度<br>		int actualSize = (int)(blockSize&gt;len?len:blockSize);<br>		<span class="hljs-keyword">for</span>(int i = 0;i &lt; size;i++)&#123;<br>			beginPos = i * actualSize;<br>			<span class="hljs-keyword">if</span>(i == size-1)&#123; //最后一块<br>				actualSize = (int)len;<br>			&#125;<span class="hljs-keyword">else</span> &#123;<br>				actualSize = blockSize;<br>				len-=actualSize;<br>			&#125;<br>			splitDetail(i,beginPos,actualSize);<br>		&#125;<br>	&#125;<br><br>	private void splitDetail(int i,int beginPos,int actualSize) throws IOException &#123;<br>		RandomAccessFile raf = new RandomAccessFile(this.src,<span class="hljs-string">&quot;r&quot;</span>);<br>		RandomAccessFile raf2 = new RandomAccessFile(this.destPaths.get(i),<span class="hljs-string">&quot;rw&quot;</span>);<br>		//随机读取<br>		raf.seek(beginPos);<br>		//读取操作<br>		byte[] data = new byte[1024];<br>		int lens = -1;<br>		<span class="hljs-keyword">while</span> ((lens = raf.read(data)) != -1)&#123;<br>			<span class="hljs-keyword">if</span>(actualSize &gt; lens)&#123; //获取本次读取的所有内容<br>				System.out.println(new String(data,0,lens));<br>				raf2.write(data,0,lens);<br>				actualSize-=lens;<br>			&#125;<span class="hljs-keyword">else</span> &#123;<br>				System.out.println(new String(data,0,actualSize));<br>				raf2.write(data,0,actualSize);<br>				<span class="hljs-built_in">break</span>;<br>			&#125;<br>		&#125;<br>		raf2.close();<br>		raf.close();<br>	&#125;<br><br>	public void merge(String destPath) throws IOException &#123;<br>		 //输出流<br>		OutputStream bos = new BufferedOutputStream(new FileOutputStream(destPath,<span class="hljs-literal">true</span>));<br>		<span class="hljs-keyword">for</span>(int i = 0;i &lt; destPaths.size();i++)&#123;<br>			InputStream bis = new BufferedInputStream(new FileInputStream(destPaths.get(i)));<br>			byte[] datas = new byte[1024];<br>			int len = -1;<br>			<span class="hljs-keyword">while</span> ((len=bis.read(datas))!=-1)&#123;<br>				bos.write(datas,0,len);<br>			&#125;<br>			bos.flush();<br>			bis.close();<br>		&#125;<br>		bos.close();<br>	&#125;<br><br>	//使用SequenceInputStream相当于容器<br>	public void merge1(String destPath) throws IOException &#123;<br>		//输出流<br>		OutputStream bos = new BufferedOutputStream(new FileOutputStream(destPath,<span class="hljs-literal">true</span>));<br>		Vector&lt;InputStream&gt; vi = new Vector&lt;&gt;();<br>		SequenceInputStream sis = null;<br>		<span class="hljs-keyword">for</span>(int i = 0;i &lt; destPaths.size();i++)&#123;<br>			vi.add(new BufferedInputStream(new FileInputStream(destPaths.get(i))));<br>		&#125;<br>		sis = new SequenceInputStream(vi.elements());<br>		//拷贝<br>		byte[] datas = new byte[1024];<br>		int len = -1;<br>		<span class="hljs-keyword">while</span> ((len=sis.read(datas))!=-1)&#123;<br>			bos.write(datas,0,len);<br>		&#125;<br>		bos.flush();<br>		sis.close();<br>		bos.close();<br>	&#125;<br><br>	public static void main(String[] args) throws IOException &#123;<br>		Test25 sf = new Test25(<span class="hljs-string">&quot;met/src/img/io.jpg&quot;</span>,<span class="hljs-string">&quot;met/src/img&quot;</span>,1024*10);<br>		sf.split();<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-0-FileUtils-工具类"><a href="#3-0-FileUtils-工具类" class="headerlink" title="3.0 FileUtils(工具类)"></a>3.0 FileUtils(工具类)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>package Io;<br><br>import org.apache.commons.io.FileUtils;<br>import org.apache.commons.io.IOUtils;<br>import org.apache.commons.io.LineIterator;<br>import org.apache.commons.io.filefilter.*;<br><br>import java.io.File;<br>import java.io.IOException;<br>import java.net.URL;<br>import java.util.ArrayList;<br>import java.util.Collection;<br>import java.util.List;<br><br>//工具类 FileUtils<br>public class Test26 &#123;<br>	public static void main(String[] args) throws IOException &#123;<br>		//文件大小<br>		long len = FileUtils.sizeOf(new File(<span class="hljs-string">&quot;met/src/img/io.jpg&quot;</span>));<br>		System.out.println(len);<br>		//目录大小<br>		len = FileUtils.sizeOf(new File(<span class="hljs-string">&quot;met/src/img&quot;</span>));<br>		System.out.println(len);<br><br>		/**列出子孙集<br>		 * 1.参数1:文件路径<br>		 * 2.参数2:需要过滤的文件<br>		 * 3.参数3:需要过滤的目录<br>		 */<br>		Collection&lt;File&gt; files = FileUtils.listFiles(new File(<span class="hljs-string">&quot;met/src/img&quot;</span>),<br>				EmptyFileFilter.NOT_EMPTY, null);<br>		<span class="hljs-keyword">for</span>(File file:files)&#123;<br>			System.out.println(file.getAbsolutePath());<br>		&#125;<br><br>		//DirectoryFileFilter.INSTANCE 文件的子孙集<br>		files = FileUtils.listFiles(new File(<span class="hljs-string">&quot;met/src/img&quot;</span>),<br>				EmptyFileFilter.NOT_EMPTY, DirectoryFileFilter.INSTANCE);<br><br>		//只要java后缀的文件<br>		files = FileUtils.listFiles(new File(<span class="hljs-string">&quot;met/src/img&quot;</span>),<br>				new SuffixFileFilter(<span class="hljs-string">&quot;.java&quot;</span>), DirectoryFileFilter.INSTANCE);<br><br>		//要java,class和空文件后缀的文件<br>		files = FileUtils.listFiles(new File(<span class="hljs-string">&quot;met/src/img&quot;</span>),<br>				FileFilterUtils.or(new SuffixFileFilter(<span class="hljs-string">&quot;java&quot;</span>),new SuffixFileFilter(<span class="hljs-string">&quot;class&quot;</span>),EmptyFileFilter.EMPTY), DirectoryFileFilter.INSTANCE);<br><br>		System.out.println(<span class="hljs-string">&quot;---------------------------------------------&quot;</span>);<br><br>		//读取文件<br>		String str = FileUtils.readFileToString(new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>),<span class="hljs-string">&quot;UTF-8&quot;</span>);<br>		System.out.println(str);<br>		byte[] datas = FileUtils.readFileToByteArray(new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>));<br><br>		//逐行读取<br>		List&lt;String&gt; lists = FileUtils.readLines(new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>), <span class="hljs-string">&quot;UTF-8&quot;</span>);<br>		<span class="hljs-keyword">for</span>(String list:lists)&#123;<br>			System.out.println(list);<br>		&#125;<br>		LineIterator it = FileUtils.lineIterator(new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>), <span class="hljs-string">&quot;UTF-8&quot;</span>);<br>		<span class="hljs-keyword">while</span> (it.hasNext())&#123;<br>			System.out.println(it.nextLine());<br>		&#125;<br><br>		System.out.println(<span class="hljs-string">&quot;---------------------------------------------&quot;</span>);<br><br>		//写出文件<br>		FileUtils.write(new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>),<span class="hljs-string">&quot;学习时间伟大的事\r\n&quot;</span>,<span class="hljs-string">&quot;UTF-8&quot;</span>,<span class="hljs-literal">true</span>);<br>		FileUtils.writeStringToFile(new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>),<span class="hljs-string">&quot;学习时间伟大的事&quot;</span>,<span class="hljs-string">&quot;UTF-8&quot;</span>);<br>		FileUtils.writeByteArrayToFile(new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>),<span class="hljs-string">&quot;学习时间幸福的事&quot;</span>.getBytes(<span class="hljs-string">&quot;UTF-8&quot;</span>),<span class="hljs-literal">true</span>);<br><br>		//列表写文件<br>		List&lt;String&gt; list = new ArrayList&lt;&gt;();<br>		list.add(<span class="hljs-string">&quot;哈哈&quot;</span>);<br>		list.add(<span class="hljs-string">&quot;嘿嘿&quot;</span>);<br>		list.add(<span class="hljs-string">&quot;哦哦&quot;</span>);<br>		//参数3是连接符   <br>		FileUtils.writeLines(new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>),list,<span class="hljs-string">&quot;....&quot;</span>,<span class="hljs-literal">true</span>);<br><br>		System.out.println(<span class="hljs-string">&quot;---------------------------------------------&quot;</span>);<br><br>		//拷贝 重点<br>		//复制文件<br>		FileUtils.copyFile(new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>),new File(<span class="hljs-string">&quot;met/src/Io/abcc&quot;</span>));<br>		//发复制文件到目录<br>		FileUtils.copyFileToDirectory(new File(<span class="hljs-string">&quot;met/src/Io/abc&quot;</span>),new File(<span class="hljs-string">&quot;met/src&quot;</span>));<br>		//复制目录到目录<br>		FileUtils.copyDirectoryToDirectory(new File(<span class="hljs-string">&quot;met/src/Io&quot;</span>),new File(<span class="hljs-string">&quot;met/src/Ios&quot;</span>));<br>		//复制目录<br>		FileUtils.copyDirectory(new File(<span class="hljs-string">&quot;met/src/Io&quot;</span>),new File(<span class="hljs-string">&quot;met/src/Ios&quot;</span>));<br>		//拷贝URL内容<br>		FileUtils.copyURLToFile(new URL(<span class="hljs-string">&quot;http://www.baidu.com&quot;</span>),new File(<span class="hljs-string">&quot;met/src/Io/abcc.html&quot;</span>));<br>		String str1 = IOUtils.toString(new URL(<span class="hljs-string">&quot;http://www.baidu.com&quot;</span>), <span class="hljs-string">&quot;UTF-8&quot;</span>);<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/java/">java</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/java/">java</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客均为ever个人编写,请勿私自转载！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/05/01/vue/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Vue</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/26/java%E5%9F%BA%E7%A1%80/">
+                        <span class="hidden-mobile">java基础</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "7FMK2vmAfJ5cmi4Xka5iLGb2-gzGzoHsz",
+          app_key: "NtIASB22WiwVXkBn1dj3H0jM",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+   
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+	<!--《添加网站运行时间 -->
+<br/>
+
+<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+var now = new Date(); 
+
+function createtime() {
+    //此处修改你的建站时间或者网站上线时间
+    var grt = new Date('03/18/2021 8:00:00');
+    now.setTime(now.getTime() + 250);
+    days = (now - grt) / 1000 / 60 / 60 / 24;
+
+    dnum = Math.floor(days);
+    hours = (now - grt) / 1000 / 60 / 60 - (24 * dnum);
+    hnum = Math.floor(hours);
+    if (String(hnum).length == 1) {
+        hnum = "0" + hnum;
+    }
+    minutes = (now - grt) / 1000 / 60 - (24 * 60 * dnum) - (60 * hnum);
+    mnum = Math.floor(minutes);
+    if (String(mnum).length == 1) {
+        mnum = "0" + mnum;
+    }
+    seconds = (now - grt) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+    snum = Math.round(seconds);
+    if (String(snum).length == 1) {
+        snum = "0" + snum;
+    }
+    document.getElementById("timeDate").innerHTML = " 本站已各种夹缝中安全运行 " + dnum + " 天 ";
+    document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+}
+setInterval("createtime()", 250);
+</script>
+
+<!-- 添加网站运行时间》-->
+
+  </div>
+  
+ 
+  
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiaoxuehua.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao@master/source/js/dianjichuzi.js"></script>
+<script src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
